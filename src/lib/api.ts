@@ -3,14 +3,15 @@ import { getApiKey, saveMetalPrice, getMetalPrice } from "./storage"
 
 const API_BASE = "https://api.metalpriceapi.com/v1"
 
-export async function fetchMetalPrice(): Promise<MetalPrice> {
+export async function fetchMetalPrice(signal?: AbortSignal): Promise<MetalPrice> {
   const apiKey = getApiKey()
   if (!apiKey) {
     throw new Error("API key not configured")
   }
 
   const res = await fetch(
-    `${API_BASE}/latest?api_key=${apiKey}&base=USD&currencies=XAU,EUR`
+    `${API_BASE}/latest?api_key=${apiKey}&base=USD&currencies=XAU,EUR`,
+    { signal }
   )
 
   if (!res.ok) {
