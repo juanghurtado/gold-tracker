@@ -27,7 +27,7 @@ export async function fetchMetalPrice(signal?: AbortSignal): Promise<MetalPrice>
 
   const price: MetalPrice = {
     xauUsd: data.rates.XAU ? 1 / data.rates.XAU : 0,
-    eurUsd: data.rates.EUR || 0,
+    eurPerUsd: data.rates.EUR || 0,
     timestamp: Date.now(),
   }
 
@@ -40,5 +40,5 @@ export function getCachedMetalPrice(): MetalPrice | null {
 }
 
 export function calculateSpotEurPerOz(price: MetalPrice): number {
-  return price.xauUsd / price.eurUsd
+  return price.xauUsd * price.eurPerUsd
 }
