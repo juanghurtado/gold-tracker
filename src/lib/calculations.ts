@@ -15,3 +15,21 @@ export function currentValue(asset: Asset, spotEurPerOz: number): number {
 export function calculateSpotEurPerOz(price: MetalPrice): number {
   return price.xauUsd * price.eurPerUsd
 }
+
+export function assetPnL(asset: Asset, spotEurPerOz: number): { pnl: number; pnlPercent: number } {
+  const value = currentValue(asset, spotEurPerOz)
+  const pnl = value - asset.cost
+  const pnlPercent = asset.cost > 0 ? (pnl / asset.cost) * 100 : 0
+  return { pnl, pnlPercent }
+}
+
+export function portfolioPnL(
+  assets: Asset[],
+  spotEurPerOz: number
+): { totalCost: number; totalValue: number; pnl: number; pnlPercent: number } {
+  const totalCost = assets.reduce((sum, a) => sum + a.cost, 0)
+  const totalValue = assets.reduce((sum, a) => sum + currentValue(a, spotEurPerOz), 0)
+  const pnl = totalValue - totalCost
+  const pnlPercent = totalCost > 0 ? (pnl / totalCost) * 100 : 0
+  return { totalCost, totalValue, pnl, pnlPercent }
+}

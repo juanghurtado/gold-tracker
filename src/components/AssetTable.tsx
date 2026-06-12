@@ -1,6 +1,5 @@
 import type { Asset, MetalPrice } from "../types"
-import { calculateSpotEurPerOz } from "../lib/calculations"
-import { currentValue } from "../lib/calculations"
+import { calculateSpotEurPerOz, assetPnL } from "../lib/calculations"
 import { Button } from "./ui/Button"
 
 const assetTypeLabel: Record<string, string> = {
@@ -46,9 +45,7 @@ export function AssetTable({
         </thead>
         <tbody>
           {assets.map((asset) => {
-            const value = currentValue(asset, spotEurPerOz)
-            const pnl = value - asset.cost
-            const pnlPercent = (pnl / asset.cost) * 100
+            const { pnl, pnlPercent } = assetPnL(asset, spotEurPerOz)
 
             return (
               <tr key={asset.id} className="border-b last:border-0">
@@ -77,7 +74,7 @@ export function AssetTable({
                 </td>
                 <td className="px-4 py-3 text-right">
                   {metalPrice
-                    ? value.toLocaleString("es-ES", {
+                    ? (pnl + asset.cost).toLocaleString("es-ES", {
                         style: "currency",
                         currency: "EUR",
                       })

@@ -1,6 +1,5 @@
 import type { Asset, MetalPrice } from "../types"
-import { calculateSpotEurPerOz } from "../lib/calculations"
-import { currentValue } from "../lib/calculations"
+import { calculateSpotEurPerOz, portfolioPnL } from "../lib/calculations"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card"
 
 interface DashboardProps {
@@ -10,13 +9,7 @@ interface DashboardProps {
 
 export function Dashboard({ assets, metalPrice }: DashboardProps) {
   const spotEurPerOz = metalPrice ? calculateSpotEurPerOz(metalPrice) : 0
-  const totalCost = assets.reduce((sum, a) => sum + a.cost, 0)
-  const totalValue = assets.reduce(
-    (sum, a) => sum + currentValue(a, spotEurPerOz),
-    0
-  )
-  const pnl = totalValue - totalCost
-  const pnlPercent = totalCost > 0 ? (pnl / totalCost) * 100 : 0
+  const { totalCost, totalValue, pnl, pnlPercent } = portfolioPnL(assets, spotEurPerOz)
 
   return (
     <div className="grid gap-4 md:grid-cols-4">
