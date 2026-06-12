@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react"
 import type { Asset, MetalPrice } from "./types"
 import { getAssets, saveAsset, deleteAsset, getApiKey, saveApiKey } from "./lib/storage"
-import { fetchMetalPrice, getCachedMetalPrice } from "./lib/api"
+import { fetchMetalPrice } from "./lib/api"
+import { getMetalPrice } from "./lib/storage"
 import { Dashboard } from "./components/Dashboard"
 import { AssetTable } from "./components/AssetTable"
 import { AddAssetDialog } from "./components/AddAssetDialog"
@@ -10,7 +11,7 @@ import { Button } from "./components/ui/Button"
 
 export default function App() {
   const [assets, setAssets] = useState<Asset[]>(() => getAssets())
-  const [metalPrice, setMetalPrice] = useState<MetalPrice | null>(() => getCachedMetalPrice())
+  const [metalPrice, setMetalPrice] = useState<MetalPrice | null>(() => getMetalPrice())
   const [apiKey, setApiKeyState] = useState<string | null>(() => getApiKey())
   const [addOpen, setAddOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)

@@ -14,7 +14,11 @@ function getItem<T>(key: string, fallback: T): T {
 }
 
 function setItem<T>(key: string, value: T): void {
-  localStorage.setItem(key, JSON.stringify(value))
+  try {
+    localStorage.setItem(key, JSON.stringify(value))
+  } catch (e) {
+    console.warn(`Failed to write to localStorage key "${key}":`, e)
+  }
 }
 
 // Assets
@@ -25,11 +29,6 @@ export function getAssets(): Asset[] {
 export function saveAsset(asset: Asset): void {
   const assets = getAssets()
   assets.push(asset)
-  setItem(ASSETS_KEY, assets)
-}
-
-export function updateAsset(asset: Asset): void {
-  const assets = getAssets().map((a) => (a.id === asset.id ? asset : a))
   setItem(ASSETS_KEY, assets)
 }
 

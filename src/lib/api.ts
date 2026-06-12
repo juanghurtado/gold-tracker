@@ -1,5 +1,5 @@
 import type { MetalPrice } from "../types"
-import { getApiKey, saveMetalPrice, getMetalPrice } from "./storage"
+import { getApiKey, saveMetalPrice } from "./storage"
 
 const API_BASE = "https://api.metalpriceapi.com/v1"
 
@@ -27,7 +27,7 @@ export async function fetchMetalPrice(signal?: AbortSignal): Promise<MetalPrice>
 
   const price: MetalPrice = {
     xauUsd: data.rates.XAU ? 1 / data.rates.XAU : 0,
-    eurUsd: data.rates.EUR || 0,
+    eurPerUsd: data.rates.EUR || 0,
     timestamp: Date.now(),
   }
 
@@ -35,10 +35,6 @@ export async function fetchMetalPrice(signal?: AbortSignal): Promise<MetalPrice>
   return price
 }
 
-export function getCachedMetalPrice(): MetalPrice | null {
-  return getMetalPrice()
-}
-
 export function calculateSpotEurPerOz(price: MetalPrice): number {
-  return price.xauUsd / price.eurUsd
+  return price.xauUsd * price.eurPerUsd
 }
