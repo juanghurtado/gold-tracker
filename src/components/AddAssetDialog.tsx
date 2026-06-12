@@ -67,12 +67,15 @@ export function AddAssetDialog({
     onOpenChange(false)
   }
 
+  const weightNum = Number(weight)
+  const purityNum = Number(purity)
+  const costNum = Number(cost)
   const isValid =
-    name &&
-    weight &&
-    purity &&
-    cost &&
-    purchaseDate
+    name.trim() !== "" &&
+    weight !== "" && weightNum > 0 &&
+    purity !== "" && purityNum > 0 && purityNum <= 100 &&
+    cost !== "" && costNum > 0 &&
+    purchaseDate !== ""
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
