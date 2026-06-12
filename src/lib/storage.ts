@@ -14,7 +14,11 @@ function getItem<T>(key: string, fallback: T): T {
 }
 
 function setItem<T>(key: string, value: T): void {
-  localStorage.setItem(key, JSON.stringify(value))
+  try {
+    localStorage.setItem(key, JSON.stringify(value))
+  } catch (e) {
+    console.warn(`Failed to write to localStorage key "${key}":`, e)
+  }
 }
 
 // Assets
