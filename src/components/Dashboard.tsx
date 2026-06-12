@@ -1,5 +1,5 @@
 import type { Asset, MetalPrice } from "../types"
-import { calculateSpotEurPerOz } from "../lib/api"
+import { calculateSpotEurPerOz } from "../lib/calculations"
 import { currentValue } from "../lib/calculations"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card"
 
