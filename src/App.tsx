@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import type { Asset, MetalPrice } from "./types"
 import { getAssets, saveAsset, deleteAsset, getApiKey, saveApiKey } from "./lib/storage"
 import { fetchMetalPrice, getCachedMetalPrice } from "./lib/api"
@@ -17,18 +17,26 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const abortControllerRef = useRef<AbortController | null>(null)
+
   async function refreshPrice(key?: string) {
     const k = key ?? apiKey
     if (!k) return
+
+    abortControllerRef.current?.abort()
+    abortControllerRef.current = new AbortController()
+
     setLoading(true)
     setError(null)
     try {
-      const price = await fetchMetalPrice()
+      const price = await fetchMetalPrice(abortControllerRef.current.signal)
       setMetalPrice(price)
     } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return
       setError(e instanceof Error ? e.message : "Error al obtener precio")
     } finally {
       setLoading(false)
+      abortControllerRef.current = null
     }
   }
 
