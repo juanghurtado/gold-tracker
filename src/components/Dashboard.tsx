@@ -1,18 +1,7 @@
 import type { Asset, MetalPrice } from "../types"
 import { calculateSpotEurPerOz } from "../lib/api"
+import { currentValue } from "../lib/calculations"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card"
-
-function weightToOzt(weight: number, unit: "ozt" | "g"): number {
-  return unit === "g" ? weight / 31.1035 : weight
-}
-
-function fineOzt(asset: Asset): number {
-  return weightToOzt(asset.weight, asset.weightUnit) * (asset.purity / 100)
-}
-
-function currentValue(asset: Asset, spotEurPerOz: number): number {
-  return fineOzt(asset) * spotEurPerOz
-}
 
 interface DashboardProps {
   assets: Asset[]
