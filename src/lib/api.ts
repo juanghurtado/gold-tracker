@@ -19,6 +19,11 @@ export async function fetchMetalPrice(): Promise<MetalPrice> {
 
   const data = await res.json()
 
+  if (!data.success || !data.rates?.XAU || !data.rates?.EUR) {
+    const errorMsg = data.error || "Metal price API returned an unexpected response"
+    throw new Error(`Metal price API error: ${errorMsg}`)
+  }
+
   const price: MetalPrice = {
     xauUsd: data.rates.XAU ? 1 / data.rates.XAU : 0,
     eurUsd: data.rates.EUR || 0,
