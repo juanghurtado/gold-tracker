@@ -16,7 +16,7 @@ export interface Asset {
 
 export interface MetalPrice {
   xauUsd: number
-  eurUsd: number
+  eurPerUsd: number
   timestamp: number
 }
 
