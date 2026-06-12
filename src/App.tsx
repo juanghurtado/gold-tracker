@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import type { Asset, MetalPrice } from "./types"
 import { getAssets, saveAsset, deleteAsset, getApiKey, saveApiKey } from "./lib/storage"
 import { fetchMetalPrice, getCachedMetalPrice } from "./lib/api"
@@ -9,28 +9,15 @@ import { SettingsDialog } from "./components/SettingsDialog"
 import { Button } from "./components/ui/Button"
 
 export default function App() {
-  const [assets, setAssets] = useState<Asset[]>([])
-  const [metalPrice, setMetalPrice] = useState<MetalPrice | null>(null)
-  const [apiKey, setApiKeyState] = useState<string | null>(null)
+  const [assets, setAssets] = useState<Asset[]>(() => getAssets())
+  const [metalPrice, setMetalPrice] = useState<MetalPrice | null>(() => getCachedMetalPrice())
+  const [apiKey, setApiKeyState] = useState<string | null>(() => getApiKey())
   const [addOpen, setAddOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    setAssets(getAssets())
-    const key = getApiKey()
-    setApiKeyState(key)
-    const cached = getCachedMetalPrice()
-    if (cached) {
-      setMetalPrice(cached)
-    }
-    if (key) {
-      refreshPrice(key)
-    }
-  }, [])
-
-  const refreshPrice = useCallback(async (key?: string) => {
+  async function refreshPrice(key?: string) {
     const k = key ?? apiKey
     if (!k) return
     setLoading(true)
@@ -43,6 +30,14 @@ export default function App() {
     } finally {
       setLoading(false)
     }
+  }
+
+  useEffect(() => {
+    if (apiKey) {
+      const timer = setTimeout(() => refreshPrice(apiKey))
+      return () => clearTimeout(timer)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiKey])
 
   function handleSaveAsset(asset: Asset) {
