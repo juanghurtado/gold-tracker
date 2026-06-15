@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { Dashboard } from "./Dashboard"
 import type { Asset, MetalPrice } from "../types"
