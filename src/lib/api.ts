@@ -34,7 +34,3 @@ export async function fetchMetalPrice(signal?: AbortSignal): Promise<MetalPrice>
   saveMetalPrice(price)
   return price
 }
-
-export function calculateSpotEurPerOz(price: MetalPrice): number {
-  return price.xauUsd * price.eurPerUsd
-}
