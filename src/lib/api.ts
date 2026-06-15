@@ -1,5 +1,5 @@
 import type { MetalPrice } from "../types"
-import { getApiKey, saveMetalPrice, getMetalPrice } from "./storage"
+import { getApiKey, saveMetalPrice } from "./storage"
 
 const API_BASE = "https://api.metalpriceapi.com/v1"
 
@@ -33,10 +33,6 @@ export async function fetchMetalPrice(signal?: AbortSignal): Promise<MetalPrice>
 
   saveMetalPrice(price)
   return price
-}
-
-export function getCachedMetalPrice(): MetalPrice | null {
-  return getMetalPrice()
 }
 
 export function calculateSpotEurPerOz(price: MetalPrice): number {

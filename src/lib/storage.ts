@@ -32,11 +32,6 @@ export function saveAsset(asset: Asset): void {
   setItem(ASSETS_KEY, assets)
 }
 
-export function updateAsset(asset: Asset): void {
-  const assets = getAssets().map((a) => (a.id === asset.id ? asset : a))
-  setItem(ASSETS_KEY, assets)
-}
-
 export function deleteAsset(id: string): void {
   const assets = getAssets().filter((a) => a.id !== id)
   setItem(ASSETS_KEY, assets)

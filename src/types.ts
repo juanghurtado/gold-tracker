@@ -19,9 +19,3 @@ export interface MetalPrice {
   eurPerUsd: number
   timestamp: number
 }
-
-export interface AppState {
-  assets: Asset[]
-  apiKey: string | null
-  metalPrice: MetalPrice | null
-}
