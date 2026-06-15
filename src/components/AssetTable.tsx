@@ -48,7 +48,7 @@ export function AssetTable({
           {assets.map((asset) => {
             const value = currentValue(asset, spotEurPerOz)
             const pnl = value - asset.cost
-            const pnlPercent = (pnl / asset.cost) * 100
+            const pnlPercent = asset.cost > 0 ? (pnl / asset.cost) * 100 : 0
 
             return (
               <tr key={asset.id} className="border-b last:border-0">
