@@ -7,6 +7,7 @@ import { AssetTable } from "./components/AssetTable"
 import { AddAssetDialog } from "./components/AddAssetDialog"
 import { SettingsDialog } from "./components/SettingsDialog"
 import { Button } from "./components/ui/Button"
+import { ErrorBoundary } from "./components/ErrorBoundary"
 
 export default function App() {
   const [assets, setAssets] = useState<Asset[]>(() => getAssets())
@@ -66,69 +67,71 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <h1 className="text-xl font-bold">Gold Tracker</h1>
-          <div className="flex gap-2">
-            {!apiKey && (
-              <Button variant="outline" onClick={() => setSettingsOpen(true)}>
-                Configurar API
-              </Button>
-            )}
-            {apiKey && (
-              <>
-                <Button
-                  variant="outline"
-                  onClick={() => refreshPrice()}
-                  disabled={loading}
-                >
-                  {loading ? "Actualizando..." : "Actualizar precios"}
+      <ErrorBoundary>
+        <header className="border-b">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+            <h1 className="text-xl font-bold">Gold Tracker</h1>
+            <div className="flex gap-2">
+              {!apiKey && (
+                <Button variant="outline" onClick={() => setSettingsOpen(true)}>
+                  Configurar API
                 </Button>
-                <Button variant="ghost" onClick={() => setSettingsOpen(true)}>
-                  API Key
-                </Button>
-              </>
-            )}
-            <Button onClick={() => setAddOpen(true)}>+ Añadir activo</Button>
+              )}
+              {apiKey && (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={() => refreshPrice()}
+                    disabled={loading}
+                  >
+                    {loading ? "Actualizando..." : "Actualizar precios"}
+                  </Button>
+                  <Button variant="ghost" onClick={() => setSettingsOpen(true)}>
+                    API Key
+                  </Button>
+                </>
+              )}
+              <Button onClick={() => setAddOpen(true)}>+ Añadir activo</Button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
-        {error && (
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
-            {error}
-          </div>
-        )}
+        <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
+          {error && (
+            <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+              {error}
+            </div>
+          )}
 
-        {!apiKey && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-            Configura tu API key de metalpriceapi.com para ver los precios del
-            oro en tiempo real.
-          </div>
-        )}
+          {!apiKey && (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+              Configura tu API key de metalpriceapi.com para ver los precios del
+              oro en tiempo real.
+            </div>
+          )}
 
-        <Dashboard assets={assets} metalPrice={metalPrice} />
+          <Dashboard assets={assets} metalPrice={metalPrice} />
 
-        <AssetTable
-          assets={assets}
-          metalPrice={metalPrice}
-          onDelete={handleDeleteAsset}
+          <AssetTable
+            assets={assets}
+            metalPrice={metalPrice}
+            onDelete={handleDeleteAsset}
+          />
+        </main>
+
+        <AddAssetDialog
+          open={addOpen}
+          onOpenChange={setAddOpen}
+          onSave={handleSaveAsset}
         />
-      </main>
 
-      <AddAssetDialog
-        open={addOpen}
-        onOpenChange={setAddOpen}
-        onSave={handleSaveAsset}
-      />
-
-      <SettingsDialog
-        open={settingsOpen}
-        onOpenChange={setSettingsOpen}
-        existingKey={apiKey}
-        onSave={handleSaveApiKey}
-      />
+        <SettingsDialog
+          open={settingsOpen}
+          onOpenChange={setSettingsOpen}
+          existingKey={apiKey}
+          onSave={handleSaveApiKey}
+        />
+      </ErrorBoundary>
     </div>
   )
 }
