@@ -2,6 +2,15 @@ import type { Asset, MetalPrice } from "../types"
 import { calculateSpotEurPerOz, portfolioPnL } from "../lib/calculations"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card"
 
+function timeAgo(timestamp: number): string {
+  const seconds = Math.floor((Date.now() - timestamp) / 1000)
+  if (seconds < 60) return "Actualizado hace unos segundos"
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) return `Actualizado hace ${minutes} min`
+  const hours = Math.floor(minutes / 60)
+  return `Actualizado hace ${hours}h`
+}
+
 interface DashboardProps {
   assets: Asset[]
   metalPrice: MetalPrice | null
@@ -53,7 +62,7 @@ export function Dashboard({ assets, metalPrice }: DashboardProps) {
                 style: "currency",
                 currency: "EUR",
               })}{" "}
-              / oz
+              / oz · {timeAgo(metalPrice.timestamp)}
             </p>
           )}
         </CardContent>

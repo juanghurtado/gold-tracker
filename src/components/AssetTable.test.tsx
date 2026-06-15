@@ -39,12 +39,22 @@ describe("AssetTable", () => {
     expect(dashes.length).toBe(2)
   })
 
-  it("calls onDelete with the correct id when clicking Vender", async () => {
+  it("calls onDelete with the correct id when clicking Eliminar", async () => {
     const onDelete = vi.fn()
     render(<AssetTable assets={[asset]} metalPrice={metalPrice} onDelete={onDelete} />)
     const user = userEvent.setup()
-    await user.click(screen.getByText("Vender"))
+    await user.click(screen.getByText("Eliminar"))
     expect(onDelete).toHaveBeenCalledTimes(1)
     expect(onDelete).toHaveBeenCalledWith("1")
+  })
+
+  it("shows edit button and calls onEdit when clicked", async () => {
+    const onEdit = vi.fn()
+    render(<AssetTable assets={[asset]} metalPrice={metalPrice} onDelete={vi.fn()} onEdit={onEdit} />)
+    expect(screen.getByText("Editar")).toBeInTheDocument()
+    const user = userEvent.setup()
+    await user.click(screen.getByText("Editar"))
+    expect(onEdit).toHaveBeenCalledTimes(1)
+    expect(onEdit).toHaveBeenCalledWith(asset)
   })
 })

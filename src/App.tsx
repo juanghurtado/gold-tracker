@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import type { Asset, MetalPrice } from "./types"
-import { getAssets, saveAsset, deleteAsset, getApiKey, saveApiKey } from "./lib/storage"
+import { getAssets, saveAsset, deleteAsset, updateAsset, getApiKey, saveApiKey, getMetalPrice, exportAllData, importAllData, getAutoRefreshInterval, saveAutoRefreshInterval } from "./lib/storage"
 import { fetchMetalPrice } from "./lib/api"
-import { getMetalPrice } from "./lib/storage"
 import { Dashboard } from "./components/Dashboard"
 import { AssetTable } from "./components/AssetTable"
 import { AddAssetDialog } from "./components/AddAssetDialog"
@@ -16,8 +15,12 @@ export default function App() {
   const [apiKey, setApiKeyState] = useState<string | null>(() => getApiKey())
   const [addOpen, setAddOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [editAsset, setEditAsset] = useState<Asset | null>(null)
+  const [editOpen, setEditOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
+  const [autoRefreshInterval, setAutoRefreshInterval] = useState(() => getAutoRefreshInterval())
 
   const abortControllerRef = useRef<AbortController | null>(null)
 
@@ -30,6 +33,7 @@ export default function App() {
 
     setLoading(true)
     setError(null)
+    setSuccess(null)
     try {
       const price = await fetchMetalPrice(abortControllerRef.current.signal)
       setMetalPrice(price)
@@ -50,9 +54,22 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiKey])
 
+  useEffect(() => {
+    if (!apiKey || autoRefreshInterval <= 0) return
+
+    const intervalId = setInterval(() => refreshPrice(apiKey), autoRefreshInterval * 60 * 1000)
+    return () => clearInterval(intervalId)
+  }, [apiKey, autoRefreshInterval])
+
   function handleSaveAsset(asset: Asset) {
-    saveAsset(asset)
-    setAssets(getAssets())
+    if (editAsset) {
+      updateAsset(asset.id, asset)
+      setAssets(getAssets())
+      setEditAsset(null)
+    } else {
+      saveAsset(asset)
+      setAssets((prev) => [...prev, asset])
+    }
   }
 
   function handleDeleteAsset(id: string) {
@@ -60,10 +77,50 @@ export default function App() {
     setAssets(getAssets())
   }
 
+  function handleEditAsset(asset: Asset) {
+    setEditAsset(asset)
+    setEditOpen(true)
+  }
+
   function handleSaveApiKey(key: string) {
     saveApiKey(key)
     setApiKeyState(key)
     refreshPrice(key)
+  }
+
+  function handleExport() {
+    const data = exportAllData()
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `gold-tracker-${new Date().toISOString().split("T")[0]}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  function handleImport(file: File) {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target?.result as string)
+        importAllData(data)
+        setAssets(getAssets())
+        setApiKeyState(getApiKey())
+        setMetalPrice(getMetalPrice())
+        setError(null)
+        setSuccess("Datos importados correctamente")
+        setTimeout(() => setSuccess(null), 3000)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al importar datos")
+      }
+    }
+    reader.readAsText(file)
+  }
+
+  function handleSaveAutoRefresh(minutes: number) {
+    saveAutoRefreshInterval(minutes)
+    setAutoRefreshInterval(minutes)
   }
 
   return (
@@ -87,8 +144,13 @@ export default function App() {
                   >
                     {loading ? "Actualizando..." : "Actualizar precios"}
                   </Button>
+                  {autoRefreshInterval > 0 && (
+                    <span className="text-xs text-muted-foreground self-center">
+                      Auto: {autoRefreshInterval} min
+                    </span>
+                  )}
                   <Button variant="ghost" onClick={() => setSettingsOpen(true)}>
-                    API Key
+                    Configuración
                   </Button>
                 </>
               )}
@@ -101,6 +163,12 @@ export default function App() {
           {error && (
             <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
               {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-800">
+              {success}
             </div>
           )}
 
@@ -117,6 +185,7 @@ export default function App() {
             assets={assets}
             metalPrice={metalPrice}
             onDelete={handleDeleteAsset}
+            onEdit={handleEditAsset}
           />
         </main>
 
@@ -126,11 +195,23 @@ export default function App() {
           onSave={handleSaveAsset}
         />
 
+        <AddAssetDialog
+          open={editOpen}
+          key={editAsset?.id ?? "new"}
+          onOpenChange={(open) => { setEditOpen(open); if (!open) setEditAsset(null) }}
+          onSave={handleSaveAsset}
+          editAsset={editAsset ?? undefined}
+        />
+
         <SettingsDialog
           open={settingsOpen}
           onOpenChange={setSettingsOpen}
           existingKey={apiKey}
           onSave={handleSaveApiKey}
+          onExport={handleExport}
+          onImport={handleImport}
+          autoRefreshInterval={autoRefreshInterval}
+          onSaveAutoRefresh={handleSaveAutoRefresh}
         />
       </ErrorBoundary>
     </div>

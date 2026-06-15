@@ -1,4 +1,5 @@
 import { Component, type ReactNode } from "react"
+import { clearAppData } from "../lib/storage"
 
 interface ErrorBoundaryProps {
   children: ReactNode
@@ -44,7 +45,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               </button>
               <button
                 onClick={() => {
-                  localStorage.clear()
+                  clearAppData()
                   window.location.reload()
                 }}
                 className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"

@@ -14,23 +14,25 @@ interface AddAssetDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   onSave: (asset: Asset) => void
+  editAsset?: Asset
 }
 
 export function AddAssetDialog({
   open,
   onOpenChange,
   onSave,
+  editAsset,
 }: AddAssetDialogProps) {
-  const [type, setType] = useState<AssetType>("coin")
-  const [name, setName] = useState("")
-  const [country, setCountry] = useState("")
-  const [year, setYear] = useState("")
-  const [weight, setWeight] = useState("")
-  const [weightUnit, setWeightUnit] = useState<"ozt" | "g">("ozt")
-  const [purity, setPurity] = useState("")
-  const [cost, setCost] = useState("")
+  const [type, setType] = useState<AssetType>(editAsset?.type ?? "coin")
+  const [name, setName] = useState(editAsset?.name ?? "")
+  const [country, setCountry] = useState(editAsset?.country ?? "")
+  const [year, setYear] = useState(editAsset?.year?.toString() ?? "")
+  const [weight, setWeight] = useState(editAsset?.weight.toString() ?? "")
+  const [weightUnit, setWeightUnit] = useState<"ozt" | "g">(editAsset?.weightUnit ?? "ozt")
+  const [purity, setPurity] = useState(editAsset?.purity.toString() ?? "")
+  const [cost, setCost] = useState(editAsset?.cost.toString() ?? "")
   const [purchaseDate, setPurchaseDate] = useState(
-    new Date().toISOString().split("T")[0]
+    editAsset?.purchaseDate ?? new Date().toISOString().split("T")[0]
   )
 
   function reset() {
@@ -48,8 +50,7 @@ export function AddAssetDialog({
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
-    const asset: Asset = {
-      id: crypto.randomUUID(),
+    const baseAsset = {
       type,
       name,
       country: country || undefined,
@@ -59,8 +60,15 @@ export function AddAssetDialog({
       purity: Number(purity),
       cost: Number(cost),
       purchaseDate,
-      createdAt: new Date().toISOString(),
     }
+
+    const asset: Asset = editAsset
+      ? { ...editAsset, ...baseAsset }
+      : {
+          ...baseAsset,
+          id: crypto.randomUUID(),
+          createdAt: new Date().toISOString(),
+        }
 
     onSave(asset)
     reset()
@@ -80,9 +88,9 @@ export function AddAssetDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogHeader>
-        <DialogTitle>Nuevo activo</DialogTitle>
+        <DialogTitle>{editAsset ? "Editar activo" : "Nuevo activo"}</DialogTitle>
         <DialogDescription>
-          Añade una moneda o lingote a tu cartera.
+          {editAsset ? "Modifica los datos del activo." : "Añade una moneda o lingote a tu cartera."}
         </DialogDescription>
       </DialogHeader>
       <form onSubmit={handleSubmit} className="space-y-4">

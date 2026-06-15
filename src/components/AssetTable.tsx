@@ -11,12 +11,14 @@ interface AssetTableProps {
   assets: Asset[]
   metalPrice: MetalPrice | null
   onDelete: (id: string) => void
+  onEdit?: (asset: Asset) => void
 }
 
 export function AssetTable({
   assets,
   metalPrice,
   onDelete,
+  onEdit,
 }: AssetTableProps) {
   const spotEurPerOz = metalPrice ? calculateSpotEurPerOz(metalPrice) : 0
 
@@ -103,13 +105,22 @@ export function AssetTable({
                   )}
                 </td>
                 <td className="px-4 py-3 text-right">
+                  {onEdit && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => onEdit(asset)}
+                    >
+                      Editar
+                    </Button>
+                  )}
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => onDelete(asset.id)}
                     className="text-destructive hover:text-destructive"
                   >
-                    Vender
+                    Eliminar
                   </Button>
                 </td>
               </tr>
