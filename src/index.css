@@ -29,7 +29,10 @@
 
   --color-border: hsl(36 4% 89%);
   --color-input: hsl(36 4% 89%);
-  --color-ring: hsl(42 55% 53%);
+--color-ring: hsl(42 55% 53%);
+  --color-gold-surface: hsla(42 55% 53% / 0.08);
+  --color-gold-border: hsl(42 45% 75%);
+  --color-gold-spotlight: hsl(42 55% 43%);
 
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -80,6 +83,9 @@
     --color-border: hsl(36 3% 19%);
     --color-input: hsl(36 3% 19%);
     --color-ring: hsl(44 62% 60%);
+    --color-gold-surface: hsla(44 62% 60% / 0.1);
+    --color-gold-border: hsl(44 42% 35%);
+    --color-gold-spotlight: hsl(44 62% 70%);
   }
 
   * {

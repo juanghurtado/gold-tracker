@@ -25,29 +25,27 @@ export function Dashboard({ assets, metalPrice }: DashboardProps) {
 
   return (
     <div className="grid gap-4 md:grid-cols-4">
-      {/* Activos — gold accent number */}
-      <Card>
+      <Card className="border-gold-border bg-gold-surface">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-[0.75rem] font-medium uppercase tracking-wider text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]">
+          <CardTitle className="text-[0.75rem] font-medium uppercase tracking-wider text-muted-foreground">
             Activos
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold" style={{ color: "hsl(42, 55%, 53%)" }}>
+          <div className="text-3xl font-extrabold tracking-tighter" style={{ color: "hsl(42, 55%, 43%)" }}>
             {assets.length}
           </div>
         </CardContent>
       </Card>
 
-      {/* Coste total — ink with secondary label */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-[0.75rem] font-medium uppercase tracking-wider text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]">
+          <CardTitle className="text-[0.75rem] font-medium uppercase tracking-wider text-muted-foreground">
             Coste total
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold tabular-nums tracking-tight">
+          <div className="text-2xl font-extrabold tabular-nums tracking-tight">
             {totalCost.toLocaleString("es-ES", {
               style: "currency",
               currency: "EUR",
@@ -58,15 +56,14 @@ export function Dashboard({ assets, metalPrice }: DashboardProps) {
         </CardContent>
       </Card>
 
-      {/* Valor actual — ink with spot price subtitle */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-[0.75rem] font-medium uppercase tracking-wider text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]">
+          <CardTitle className="text-[0.75rem] font-medium uppercase tracking-wider text-muted-foreground">
             Valor actual
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold tabular-nums tracking-tight">
+          <div className="text-2xl font-extrabold tabular-nums tracking-tight">
             {totalValue.toLocaleString("es-ES", {
               style: "currency",
               currency: "EUR",
@@ -75,7 +72,7 @@ export function Dashboard({ assets, metalPrice }: DashboardProps) {
             })}
           </div>
           {metalPrice && (
-            <p className="mt-1 text-[0.75rem] text-[hsl(36,2%,45%)] tabular-nums dark:text-[hsl(36,2%,58%)]">
+            <p className="mt-1 text-[0.75rem] text-muted-foreground tabular-nums">
               Spot: {spotEurPerOz.toLocaleString("es-ES", {
                 style: "currency",
                 currency: "EUR",
@@ -87,19 +84,18 @@ export function Dashboard({ assets, metalPrice }: DashboardProps) {
         </CardContent>
       </Card>
 
-      {/* P&L — colored value with +/− symbol */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-[0.75rem] font-medium uppercase tracking-wider text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]">
+          <CardTitle className="text-[0.75rem] font-medium uppercase tracking-wider text-muted-foreground">
             Beneficio / Pérdida
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className={`text-2xl font-bold tabular-nums tracking-tight ${
+          <div className={`text-3xl font-extrabold tabular-nums tracking-tight ${
             isPositive
-              ? "text-[hsl(145,42%,30%)] dark:text-[hsl(145,40%,38%)]"
+              ? "text-secondary dark:text-secondary"
               : isNegative
-                ? "text-[hsl(5,63%,42%)] dark:text-[hsl(0,63%,52%)]"
+                ? "text-destructive dark:text-destructive"
                 : ""
           }`}>
             {isPositive ? "+" : ""}
@@ -110,12 +106,12 @@ export function Dashboard({ assets, metalPrice }: DashboardProps) {
               maximumFractionDigits: 0,
             })}
           </div>
-          <p className={`mt-1 text-[0.75rem] tabular-nums ${
+          <p className={`mt-1 text-sm font-semibold tabular-nums ${
             isPositive
-              ? "text-[hsl(145,42%,30%)] dark:text-[hsl(145,40%,38%)]"
+              ? "text-secondary dark:text-secondary"
               : isNegative
-                ? "text-[hsl(5,63%,42%)] dark:text-[hsl(0,63%,52%)]"
-                : "text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]"
+                ? "text-destructive dark:text-destructive"
+                : "text-muted-foreground"
           }`}>
             {isPositive ? "+" : ""}{pnlPercent.toFixed(2)}%
           </p>

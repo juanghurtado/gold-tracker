@@ -41,7 +41,7 @@ describe("Dashboard", () => {
     // P&L value is split across "+" and "850 €" text nodes
     const pnlElements = screen.getAllByText(/850/)
     const pnlEl = pnlElements.find(el =>
-      el.className.includes("text-[hsl(145,42%,30%)]")
+      el.className.includes("text-secondary")
     )
     expect(pnlEl).toBeInTheDocument()
   })
@@ -54,7 +54,7 @@ describe("Dashboard", () => {
     // P&L value is split across "-" and "575 €" text nodes
     const pnlElements = screen.getAllByText(/575/)
     const pnlEl = pnlElements.find(el =>
-      el.className.includes("text-[hsl(5,63%,42%)]")
+      el.className.includes("text-destructive")
     )
     expect(pnlEl).toBeInTheDocument()
   })

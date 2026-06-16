@@ -26,12 +26,12 @@ export function AssetTable({
 
   if (assets.length === 0) {
     return (
-      <div className="rounded-[var(--radius-lg)] border border-border bg-card">
+      <div className="rounded-[var(--radius-lg)] border-2 border-border bg-card">
         <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
-          <div className="text-sm font-medium text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]">
+          <div className="text-sm font-semibold text-muted-foreground">
             No hay activos en tu cartera
           </div>
-          <div className="text-xs text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]">
+          <div className="text-xs text-muted-foreground">
             Añade tu primera moneda o lingote para empezar a seguir tu inversión.
           </div>
         </div>
@@ -40,29 +40,29 @@ export function AssetTable({
   }
 
   return (
-    <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-border">
+    <div className="overflow-x-auto rounded-[var(--radius-lg)] border-2 border-border">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-border bg-[hsl(36,3%,93%)]/50 dark:bg-[hsl(36,3%,16%)]/50">
-            <th className={`${mono} px-4 py-3 text-left text-[0.75rem] font-medium uppercase tracking-wider text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]`}>
+          <tr className="border-b-2 border-border bg-gold-surface">
+            <th className={`${mono} px-4 py-3 text-left text-[0.75rem] font-semibold uppercase tracking-wider text-muted-foreground`}>
               Nombre
             </th>
-            <th className={`${mono} px-4 py-3 text-left text-[0.75rem] font-medium uppercase tracking-wider text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]`}>
+            <th className={`${mono} px-4 py-3 text-left text-[0.75rem] font-semibold uppercase tracking-wider text-muted-foreground`}>
               Tipo
             </th>
-            <th className={`${mono} px-4 py-3 text-right text-[0.75rem] font-medium uppercase tracking-wider text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]`}>
+            <th className={`${mono} px-4 py-3 text-right text-[0.75rem] font-semibold uppercase tracking-wider text-muted-foreground`}>
               Peso
             </th>
-            <th className={`${mono} px-4 py-3 text-right text-[0.75rem] font-medium uppercase tracking-wider text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]`}>
+            <th className={`${mono} px-4 py-3 text-right text-[0.75rem] font-semibold uppercase tracking-wider text-muted-foreground`}>
               Pureza
             </th>
-            <th className={`${mono} px-4 py-3 text-right text-[0.75rem] font-medium uppercase tracking-wider text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]`}>
+            <th className={`${mono} px-4 py-3 text-right text-[0.75rem] font-semibold uppercase tracking-wider text-muted-foreground`}>
               Coste
             </th>
-            <th className={`${mono} px-4 py-3 text-right text-[0.75rem] font-medium uppercase tracking-wider text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]`}>
+            <th className={`${mono} px-4 py-3 text-right text-[0.75rem] font-semibold uppercase tracking-wider text-muted-foreground`}>
               Valor actual
             </th>
-            <th className={`${mono} px-4 py-3 text-right text-[0.75rem] font-medium uppercase tracking-wider text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]`}>
+            <th className={`${mono} px-4 py-3 text-right text-[0.75rem] font-semibold uppercase tracking-wider text-muted-foreground`}>
               P&L
             </th>
             <th className="px-4 py-3 text-right">
@@ -70,7 +70,7 @@ export function AssetTable({
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-[hsl(36,4%,89%)] dark:divide-[hsl(36,3%,19%)]">
+        <tbody className="divide-y-2 divide-border">
           {assets.map((asset) => {
             const { pnl, pnlPercent } = assetPnL(asset, spotEurPerOz)
             const currentValue = pnl + asset.cost
@@ -80,14 +80,14 @@ export function AssetTable({
             return (
               <tr
                 key={asset.id}
-                className="transition-colors hover:bg-[hsl(36,3%,93%)]/50 dark:hover:bg-[hsl(36,3%,16%)]/50"
+                className="transition-colors hover:bg-gold-surface"
               >
                 <td className="px-4 py-3">
-                  <div className="font-medium text-[hsl(36,4%,8%)] dark:text-[hsl(42,3%,93%)]">
+                  <div className="font-semibold text-foreground">
                     {asset.name}
                   </div>
                   {asset.country && (
-                    <div className="text-xs text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]">
+                    <div className="text-xs text-muted-foreground">
                       {asset.country}
                       {asset.year && (
                         <>
@@ -101,26 +101,26 @@ export function AssetTable({
                   )}
                 </td>
                 <td className="px-4 py-3">
-                  <span className="text-xs font-medium text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]">
+                  <span className="text-xs font-medium text-muted-foreground">
                     {assetTypeLabel[asset.type]}
                   </span>
                 </td>
-                <td className={`px-4 py-3 text-right tabular-nums text-[hsl(36,4%,8%)] dark:text-[hsl(42,3%,93%)] ${mono}`}>
+                <td className={`px-4 py-3 text-right tabular-nums text-foreground ${mono}`}>
                   {asset.weight}{" "}
-                  <span className="text-xs text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]">
-                    {asset.weightUnit === "ozt" ? "oz t" : "g"}
+                  <span className="text-xs text-muted-foreground">
+                    {asset.weightUnit === "ozt" ? "oz" : "g"}
                   </span>
                 </td>
-                <td className={`px-4 py-3 text-right tabular-nums text-[hsl(36,4%,8%)] dark:text-[hsl(42,3%,93%)] ${mono}`}>
+                <td className={`px-4 py-3 text-right tabular-nums text-foreground ${mono}`}>
                   {asset.purity}%
                 </td>
-                <td className={`px-4 py-3 text-right tabular-nums text-[hsl(36,4%,8%)] dark:text-[hsl(42,3%,93%)] ${mono}`}>
+                <td className={`px-4 py-3 text-right tabular-nums text-foreground ${mono}`}>
                   {asset.cost.toLocaleString("es-ES", {
                     style: "currency",
                     currency: "EUR",
                   })}
                 </td>
-                <td className={`px-4 py-3 text-right tabular-nums text-[hsl(36,4%,8%)] dark:text-[hsl(42,3%,93%)] ${mono}`}>
+                <td className={`px-4 py-3 text-right tabular-nums text-foreground ${mono}`}>
                   {metalPrice
                     ? currentValue.toLocaleString("es-ES", {
                         style: "currency",
@@ -131,25 +131,25 @@ export function AssetTable({
                 <td className={`px-4 py-3 text-right tabular-nums ${mono}`}>
                   {metalPrice ? (
                     <>
-                      <div className={
+                      <div className={`font-semibold ${
                         isPositive
-                          ? "text-[hsl(145,42%,30%)] dark:text-[hsl(145,40%,38%)]"
+                          ? "text-secondary dark:text-secondary"
                           : isNegative
-                            ? "text-[hsl(5,63%,42%)] dark:text-[hsl(0,63%,52%)]"
-                            : "text-[hsl(36,4%,8%)] dark:text-[hsl(42,3%,93%)]"
-                      }>
+                            ? "text-destructive dark:text-destructive"
+                            : "text-foreground"
+                      }`}>
                         {isPositive ? "+" : ""}
                         {pnl.toLocaleString("es-ES", {
                           style: "currency",
                           currency: "EUR",
                         })}
                       </div>
-                      <div className={`text-xs ${
+                      <div className={`text-xs font-medium ${
                         isPositive
-                          ? "text-[hsl(145,42%,30%)] dark:text-[hsl(145,40%,38%)]"
+                          ? "text-secondary dark:text-secondary"
                           : isNegative
-                            ? "text-[hsl(5,63%,42%)] dark:text-[hsl(0,63%,52%)]"
-                            : "text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]"
+                            ? "text-destructive dark:text-destructive"
+                            : "text-muted-foreground"
                       }`}>
                         {isPositive ? "+" : ""}
                         {pnlPercent.toFixed(2)}%
@@ -166,17 +166,20 @@ export function AssetTable({
                         variant="ghost"
                         size="sm"
                         onClick={() => onEdit(asset)}
+                        className="text-muted-foreground hover:text-foreground"
+                        aria-label="Editar"
                       >
-                        Editar
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
                       </Button>
                     )}
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-[hsl(5,63%,42%)] hover:text-[hsl(5,63%,37%)] dark:text-[hsl(0,63%,52%)] dark:hover:text-[hsl(0,63%,47%)]"
+                      className="text-destructive/70 hover:text-destructive"
                       onClick={() => onDelete(asset.id)}
+                      aria-label="Eliminar"
                     >
-                      Eliminar
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                     </Button>
                   </div>
                 </td>
