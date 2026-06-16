@@ -146,9 +146,9 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background">
       <ErrorBoundary>
-        <header className="border-b-2 border-[hsl(36,4%,89%)] dark:border-[hsl(36,3%,19%)]">
+        <header className="border-b border-border">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-            <h1 className="text-2xl font-extrabold tracking-tighter" style={{ color: "hsl(42, 55%, 53%)" }}>
+            <h1 className="text-2xl font-extrabold tracking-tighter text-primary">
               Gold Tracker
             </h1>
             <div className="flex items-center gap-2">
@@ -167,7 +167,7 @@ export default function App() {
                     {loading ? "Actualizando..." : "Actualizar precios"}
                   </Button>
                   {autoRefreshInterval > 0 && (
-                    <span className="text-xs text-[hsl(36,2%,45%)] self-center dark:text-[hsl(36,2%,58%)]">
+                    <span className="text-xs text-muted-foreground self-center">
                       Auto: {autoRefreshInterval} min
                     </span>
                   )}
@@ -181,7 +181,8 @@ export default function App() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setDark((d) => !d)}
-                className="text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]"
+                className="text-muted-foreground"
+                aria-label={dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
               >
                 {dark ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -195,19 +196,19 @@ export default function App() {
 
         <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
           {error && (
-            <div className="rounded-[var(--radius-lg)] border border-[hsl(5,63%,42%)] bg-[hsl(5,63%,42%)]/10 p-4 text-sm text-[hsl(5,63%,42%)] dark:text-[hsl(0,63%,52%)]">
+            <div className="rounded-[var(--radius-lg)] border border-destructive bg-destructive/10 p-4 text-sm text-destructive">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="rounded-[var(--radius-lg)] border border-[hsl(145,42%,30%)] bg-[hsl(145,42%,30%)]/10 p-4 text-sm text-[hsl(145,42%,30%)] dark:text-[hsl(145,40%,38%)]">
+            <div className="rounded-[var(--radius-lg)] border border-secondary bg-secondary/10 p-4 text-sm text-secondary">
               {success}
             </div>
           )}
 
           {!apiKey && (
-            <div className="rounded-[var(--radius-lg)] border border-[hsl(42,55%,53%)]/40 bg-[hsl(42,55%,53%)]/10 p-4 text-sm text-[hsl(42,55%,53%)] dark:text-[hsl(44,62%,60%)]">
+            <div className="rounded-[var(--radius-lg)] border border-primary/40 bg-primary/10 p-4 text-sm text-primary">
               Configura tu API key de metalpriceapi.com para ver los precios del
               oro en tiempo real.
             </div>

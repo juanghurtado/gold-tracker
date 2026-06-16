@@ -26,7 +26,7 @@ export function AssetTable({
 
   if (assets.length === 0) {
     return (
-      <div className="rounded-[var(--radius-lg)] border-2 border-border bg-card">
+      <div className="rounded-[var(--radius-lg)] border border-border bg-card">
         <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
           <div className="text-sm font-semibold text-muted-foreground">
             No hay activos en tu cartera
@@ -40,10 +40,10 @@ export function AssetTable({
   }
 
   return (
-    <div className="overflow-x-auto rounded-[var(--radius-lg)] border-2 border-border">
+    <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-border">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b-2 border-border bg-gold-surface">
+          <tr className="border-b border-border bg-gold-surface">
             <th className={`${mono} px-4 py-3 text-left text-[0.75rem] font-semibold uppercase tracking-wider text-muted-foreground`}>
               Nombre
             </th>
@@ -70,7 +70,7 @@ export function AssetTable({
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y-2 divide-border">
+        <tbody className="divide-y divide-border">
           {assets.map((asset) => {
             const { pnl, pnlPercent } = assetPnL(asset, spotEurPerOz)
             const currentValue = pnl + asset.cost

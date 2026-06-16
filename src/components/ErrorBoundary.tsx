@@ -1,5 +1,6 @@
 import { Component, type ReactNode } from "react"
 import { clearAppData } from "../lib/storage"
+import { Button } from "./ui/Button"
 
 interface ErrorBoundaryProps {
   children: ReactNode
@@ -37,21 +38,20 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               datos de la aplicación si el problema persiste.
             </p>
             <div className="flex justify-center gap-2">
-              <button
+              <Button
                 onClick={() => window.location.reload()}
-                className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
               >
                 Recargar
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="outline"
                 onClick={() => {
                   clearAppData()
                   window.location.reload()
                 }}
-                className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
               >
                 Vaciar datos
-              </button>
+              </Button>
             </div>
             {this.state.error && (
               <details className="mt-4 text-left">

@@ -32,7 +32,7 @@ export function Dashboard({ assets, metalPrice }: DashboardProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-extrabold tracking-tighter" style={{ color: "hsl(42, 55%, 43%)" }}>
+          <div className="text-3xl font-extrabold tracking-tighter text-gold-spotlight">
             {assets.length}
           </div>
         </CardContent>

@@ -3,6 +3,7 @@ import type { Asset, AssetType } from "../types"
 import { Button } from "./ui/Button"
 import { Input } from "./ui/Input"
 import { Label } from "./ui/Label"
+import { Select } from "./ui/Select"
 import {
   Dialog,
   DialogHeader,
@@ -161,17 +162,16 @@ export function AddAssetDialog({
           </div>
           <div className="space-y-2">
             <Label htmlFor="weightUnit">Unidad</Label>
-            <select
+            <Select
               id="weightUnit"
               value={weightUnit}
               onChange={(e) =>
                 setWeightUnit(e.target.value as "ozt" | "g")
               }
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
             >
               <option value="ozt">oz</option>
               <option value="g">g</option>
-            </select>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="purity">Pureza (%)</Label>

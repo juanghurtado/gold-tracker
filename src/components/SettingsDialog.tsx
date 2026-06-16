@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Button } from "./ui/Button"
 import { Input } from "./ui/Input"
 import { Label } from "./ui/Label"
+import { Select } from "./ui/Select"
 import {
   Dialog,
   DialogHeader,
@@ -119,10 +120,9 @@ export function SettingsDialog({
           <p className="text-xs text-muted-foreground mb-2">
             Actualiza el precio del oro automáticamente cada cierto tiempo.
           </p>
-          <select
+          <Select
             value={autoRefreshInterval ?? 0}
             onChange={(e) => onSaveAutoRefresh(Number(e.target.value))}
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
           >
             <option value={0}>Desactivado</option>
             <option value={5}>Cada 5 minutos</option>
@@ -130,7 +130,7 @@ export function SettingsDialog({
             <option value={15}>Cada 15 minutos</option>
             <option value={30}>Cada 30 minutos</option>
             <option value={60}>Cada 1 hora</option>
-          </select>
+          </Select>
         </div>
       )}
     </Dialog>
