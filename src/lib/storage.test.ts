@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { getAssets, saveAsset, deleteAsset, updateAsset, getApiKey, saveApiKey, getMetalPrice, saveMetalPrice, clearAppData, exportAllData, importAllData, getAutoRefreshInterval, saveAutoRefreshInterval } from "./storage"
 import type { Asset, MetalPrice } from "../types"
+import type { ExportData } from "./storage"
 
 const asset: Asset = {
   id: "1",
@@ -188,7 +189,34 @@ describe("exportAllData / importAllData", () => {
   })
 
   it("importAllData throws on invalid version", () => {
-    expect(() => importAllData({ version: 999 } as any)).toThrow("Unsupported data format")
+    expect(() => importAllData({ version: 999 } as ExportData)).toThrow("Unsupported data format")
+  })
+
+  it("rejects data with non-array assets", () => {
+    expect(() => importAllData({ version: 1, exportedAt: "", assets: "invalid" as unknown as Asset[], apiKey: null, metalPrice: null } as ExportData)).toThrow("Unsupported data format")
+  })
+
+  it("rejects data with missing required asset fields", () => {
+    expect(() => importAllData({ version: 1, exportedAt: "", assets: [{ id: "1" }] as unknown as Asset[], apiKey: null, metalPrice: null } as ExportData)).toThrow("Unsupported data format")
+  })
+
+  it("rejects data with invalid asset type", () => {
+    expect(() => importAllData({ version: 1, exportedAt: "", assets: [{ id: "1", type: "invalid" as unknown as Asset["type"], name: "Test", weight: 1, weightUnit: "ozt", purity: 99, cost: 100, purchaseDate: "2024-01-01", createdAt: "2024-01-01" }] as unknown as Asset[], apiKey: null, metalPrice: null } as ExportData)).toThrow("Unsupported data format")
+  })
+
+  it("rejects data with non-numeric metalPrice fields", () => {
+    expect(() => importAllData({ version: 1, exportedAt: "", assets: [asset], apiKey: null, metalPrice: { xauUsd: "2000" as unknown as number, eurPerUsd: 0.92, timestamp: 1 } } as ExportData)).toThrow("Unsupported data format")
+  })
+
+  it("accepts valid export data with all fields", () => {
+    const price: MetalPrice = { xauUsd: 3000, eurPerUsd: 0.95, timestamp: 1718000000000 }
+    const data = { version: 1, exportedAt: "", assets: [asset, asset2], apiKey: "imported-key", metalPrice: price }
+    expect(() => importAllData(data)).not.toThrow()
+  })
+
+  it("accepts valid data with null metalPrice", () => {
+    const data = { version: 1, exportedAt: "", assets: [asset], apiKey: "key", metalPrice: null }
+    expect(() => importAllData(data)).not.toThrow()
   })
 
   it("importAllData replaces existing data", () => {

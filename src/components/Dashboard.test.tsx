@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest"
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { Dashboard } from "./Dashboard"
 import type { Asset, MetalPrice } from "../types"
@@ -51,5 +51,34 @@ describe("Dashboard", () => {
     const pnlFormatted = pnl.toLocaleString("es-ES", { style: "currency", currency: "EUR" })
     const pnlEl = screen.getByText((content) => content.replace(/\s/g, " ") === pnlFormatted.replace(/\s/g, " "))
     expect(pnlEl.className).toContain("text-red-600")
+  })
+
+  describe("timeAgo", () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+      vi.setSystemTime(new Date("2024-06-15T12:00:00Z"))
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('shows "unos segundos" when price updated less than 60 seconds ago', () => {
+      const recentPrice: MetalPrice = { ...highPrice, timestamp: Date.now() - 30 * 1000 }
+      render(<Dashboard assets={[pureAsset]} metalPrice={recentPrice} />)
+      expect(screen.getByText(/Actualizado hace unos segundos/)).toBeInTheDocument()
+    })
+
+    it('shows "X min" when price updated less than 60 minutes ago', () => {
+      const recentPrice: MetalPrice = { ...highPrice, timestamp: Date.now() - 5 * 60 * 1000 }
+      render(<Dashboard assets={[pureAsset]} metalPrice={recentPrice} />)
+      expect(screen.getByText(/Actualizado hace 5 min/)).toBeInTheDocument()
+    })
+
+    it('shows "Xh" when price updated 2 hours ago', () => {
+      const oldPrice: MetalPrice = { ...highPrice, timestamp: Date.now() - 2 * 60 * 60 * 1000 }
+      render(<Dashboard assets={[pureAsset]} metalPrice={oldPrice} />)
+      expect(screen.getByText(/Actualizado hace 2h/)).toBeInTheDocument()
+    })
   })
 })

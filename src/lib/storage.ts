@@ -92,8 +92,38 @@ export function exportAllData(): ExportData {
   }
 }
 
+function isValidExportData(data: unknown): data is ExportData {
+  if (!data || typeof data !== "object") return false
+  const d = data as Record<string, unknown>
+  if (d.version !== 1) return false
+  if (typeof d.exportedAt !== "string") return false
+  if (!Array.isArray(d.assets)) return false
+  for (const asset of d.assets) {
+    if (!asset || typeof asset !== "object") return false
+    const a = asset as Record<string, unknown>
+    if (typeof a.id !== "string") return false
+    if (a.type !== "coin" && a.type !== "bar") return false
+    if (typeof a.name !== "string") return false
+    if (typeof a.weight !== "number") return false
+    if (a.weightUnit !== "ozt" && a.weightUnit !== "g") return false
+    if (typeof a.purity !== "number") return false
+    if (typeof a.cost !== "number") return false
+    if (typeof a.purchaseDate !== "string") return false
+    if (typeof a.createdAt !== "string") return false
+  }
+  if (d.apiKey !== null && typeof d.apiKey !== "string") return false
+  if (d.metalPrice !== null) {
+    if (typeof d.metalPrice !== "object") return false
+    const mp = d.metalPrice as Record<string, unknown>
+    if (typeof mp.xauUsd !== "number") return false
+    if (typeof mp.eurPerUsd !== "number") return false
+    if (typeof mp.timestamp !== "number") return false
+  }
+  return true
+}
+
 export function importAllData(data: ExportData): void {
-  if (!data || data.version !== 1) {
+  if (!isValidExportData(data)) {
     throw new Error("Unsupported data format")
   }
   setItem(ASSETS_KEY, data.assets)
