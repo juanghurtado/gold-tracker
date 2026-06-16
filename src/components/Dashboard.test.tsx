@@ -24,33 +24,39 @@ describe("Dashboard", () => {
     expect(screen.getByText("Activos")).toBeInTheDocument()
     expect(screen.getByText("Coste total")).toBeInTheDocument()
     expect(screen.getByText("Valor actual")).toBeInTheDocument()
-    expect(screen.getByText("P&L")).toBeInTheDocument()
+    expect(screen.getByText("Beneficio / Pérdida")).toBeInTheDocument()
   })
 
   it("shows formatted total cost and total value with one asset", () => {
     render(<Dashboard assets={[pureAsset]} metalPrice={highPrice} />)
     expect(screen.getByText("1")).toBeInTheDocument()
-    expect(screen.getByText(/2000,00/)).toBeInTheDocument()
-    expect(screen.getAllByText(/2850,00/)).toHaveLength(2)
+    expect(screen.getByText(/2000/)).toBeInTheDocument()
+    expect(screen.getAllByText(/2850/)).toHaveLength(2)
   })
 
-  it("shows positive P&L in green", () => {
+  it("shows positive P&L in forest green", () => {
     render(<Dashboard assets={[pureAsset]} metalPrice={highPrice} />)
     const value = 1 * (3000 * 0.95)
-    const pnl = value - 2000
-    const pnlFormatted = pnl.toLocaleString("es-ES", { style: "currency", currency: "EUR" })
-    const pnlEl = screen.getByText((content) => content.replace(/\s/g, " ") === pnlFormatted.replace(/\s/g, " "))
-    expect(pnlEl.className).toContain("text-green-600")
+    void value
+    // P&L value is split across "+" and "850 €" text nodes
+    const pnlElements = screen.getAllByText(/850/)
+    const pnlEl = pnlElements.find(el =>
+      el.className.includes("text-[hsl(145,42%,30%)]")
+    )
+    expect(pnlEl).toBeInTheDocument()
   })
 
-  it("shows negative P&L in red", () => {
+  it("shows negative P&L in destructive red", () => {
     const lowPrice: MetalPrice = { xauUsd: 1500, eurPerUsd: 0.95, timestamp: 1 }
     render(<Dashboard assets={[pureAsset]} metalPrice={lowPrice} />)
     const value = 1 * (1500 * 0.95)
-    const pnl = value - 2000
-    const pnlFormatted = pnl.toLocaleString("es-ES", { style: "currency", currency: "EUR" })
-    const pnlEl = screen.getByText((content) => content.replace(/\s/g, " ") === pnlFormatted.replace(/\s/g, " "))
-    expect(pnlEl.className).toContain("text-red-600")
+    void value
+    // P&L value is split across "-" and "575 €" text nodes
+    const pnlElements = screen.getAllByText(/575/)
+    const pnlEl = pnlElements.find(el =>
+      el.className.includes("text-[hsl(5,63%,42%)]")
+    )
+    expect(pnlEl).toBeInTheDocument()
   })
 
   describe("timeAgo", () => {

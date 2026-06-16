@@ -21,8 +21,28 @@ export default function App() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [autoRefreshInterval, setAutoRefreshInterval] = useState(() => getAutoRefreshInterval())
+  const [dark, setDark] = useState(() => {
+    try {
+      return localStorage.getItem("dark-mode") === "true"
+    } catch {
+      return false
+    }
+  })
 
   const abortControllerRef = useRef<AbortController | null>(null)
+
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add("dark")
+    } else {
+      document.documentElement.classList.remove("dark")
+    }
+    try {
+      localStorage.setItem("dark-mode", String(dark))
+    } catch {
+      // storage full or unavailable
+    }
+  }, [dark])
 
   async function refreshPrice(key?: string) {
     const k = key ?? apiKey
@@ -126,10 +146,24 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background">
       <ErrorBoundary>
-        <header className="border-b">
+        <header className="border-b border-[hsl(36,4%,89%)] dark:border-[hsl(36,3%,19%)]">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-            <h1 className="text-xl font-bold">Gold Tracker</h1>
-            <div className="flex gap-2">
+            <h1 className="text-xl font-bold tracking-tight" style={{ color: "hsl(42, 55%, 53%)" }}>
+              Gold Tracker
+            </h1>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setDark((d) => !d)}
+                className="text-[hsl(36,2%,45%)] dark:text-[hsl(36,2%,58%)]"
+              >
+                {dark ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                )}
+              </Button>
               {!apiKey && (
                 <Button variant="outline" onClick={() => setSettingsOpen(true)}>
                   Configurar API
@@ -145,7 +179,7 @@ export default function App() {
                     {loading ? "Actualizando..." : "Actualizar precios"}
                   </Button>
                   {autoRefreshInterval > 0 && (
-                    <span className="text-xs text-muted-foreground self-center">
+                    <span className="text-xs text-[hsl(36,2%,45%)] self-center dark:text-[hsl(36,2%,58%)]">
                       Auto: {autoRefreshInterval} min
                     </span>
                   )}
@@ -161,19 +195,19 @@ export default function App() {
 
         <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
           {error && (
-            <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+            <div className="rounded-[var(--radius-lg)] border border-[hsl(5,63%,42%)] bg-[hsl(5,63%,42%)]/10 p-4 text-sm text-[hsl(5,63%,42%)] dark:text-[hsl(0,63%,52%)]">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-800">
+            <div className="rounded-[var(--radius-lg)] border border-[hsl(145,42%,30%)] bg-[hsl(145,42%,30%)]/10 p-4 text-sm text-[hsl(145,42%,30%)] dark:text-[hsl(145,40%,38%)]">
               {success}
             </div>
           )}
 
           {!apiKey && (
-            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+            <div className="rounded-[var(--radius-lg)] border border-[hsl(42,55%,53%)]/40 bg-[hsl(42,55%,53%)]/10 p-4 text-sm text-[hsl(42,55%,53%)] dark:text-[hsl(44,62%,60%)]">
               Configura tu API key de metalpriceapi.com para ver los precios del
               oro en tiempo real.
             </div>
