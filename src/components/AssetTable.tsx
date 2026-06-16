@@ -24,79 +24,128 @@ export function AssetTable({
 
   if (assets.length === 0) {
     return (
-      <div className="rounded-lg border p-8 text-center text-muted-foreground">
-        No hay activos en tu cartera. Añade tu primer activo.
+      <div className="rounded-lg border border-border bg-card">
+        <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+          <div className="text-sm font-medium text-muted-foreground">
+            No hay activos en tu cartera
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Añade tu primera moneda o lingote para empezar a seguir tu inversión.
+          </div>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border">
+    <div className="overflow-x-auto rounded-lg border border-border">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b bg-muted/50">
-            <th className="px-4 py-3 text-left font-medium">Nombre</th>
-            <th className="px-4 py-3 text-left font-medium">Tipo</th>
-            <th className="px-4 py-3 text-right font-medium">Peso</th>
-            <th className="px-4 py-3 text-right font-medium">Pureza</th>
-            <th className="px-4 py-3 text-right font-medium">Coste</th>
-            <th className="px-4 py-3 text-right font-medium">Valor actual</th>
-            <th className="px-4 py-3 text-right font-medium">P&L</th>
-            <th className="px-4 py-3 text-right font-medium"></th>
+          <tr className="border-b border-border bg-muted/30">
+            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Nombre
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Tipo
+            </th>
+            <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Peso
+            </th>
+            <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Pureza
+            </th>
+            <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Coste
+            </th>
+            <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Valor actual
+            </th>
+            <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              P&L
+            </th>
+            <th className="px-4 py-3 text-right">
+              <span className="sr-only">Acciones</span>
+            </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-border">
           {assets.map((asset) => {
             const { pnl, pnlPercent } = assetPnL(asset, spotEurPerOz)
+            const currentValue = pnl + asset.cost
+            const isPositive = pnl >= 0
+            const isNegative = pnl < 0
 
             return (
-              <tr key={asset.id} className="border-b last:border-0">
+              <tr
+                key={asset.id}
+                className="transition-colors hover:bg-muted/20"
+              >
                 <td className="px-4 py-3">
-                  <div className="font-medium">{asset.name}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {[asset.country, asset.year]
-                      .filter(Boolean)
-                      .join(" · ")}
+                  <div className="font-medium text-foreground">
+                    {asset.name}
                   </div>
+                  {asset.country && (
+                    <div className="text-xs text-muted-foreground">
+                      {asset.country}
+                      {asset.year && (
+                        <>
+                          {" "}·{" "}
+                          <time dateTime={asset.year.toString()}>
+                            {asset.year}
+                          </time>
+                        </>
+                      )}
+                    </div>
+                  )}
                 </td>
                 <td className="px-4 py-3">
-                  {assetTypeLabel[asset.type]}
+                  <span className="text-xs font-medium text-muted-foreground">
+                    {assetTypeLabel[asset.type]}
+                  </span>
                 </td>
-                <td className="px-4 py-3 text-right">
-                  {asset.weight} {asset.weightUnit === "ozt" ? "oz" : "g"}
+                <td className="px-4 py-3 text-right tabular-nums text-foreground">
+                  {asset.weight}{" "}
+                  <span className="text-xs text-muted-foreground">
+                    {asset.weightUnit === "ozt" ? "oz t" : "g"}
+                  </span>
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-4 py-3 text-right tabular-nums text-foreground">
                   {asset.purity}%
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-4 py-3 text-right tabular-nums text-foreground">
                   {asset.cost.toLocaleString("es-ES", {
                     style: "currency",
                     currency: "EUR",
                   })}
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-4 py-3 text-right tabular-nums text-foreground">
                   {metalPrice
-                    ? (pnl + asset.cost).toLocaleString("es-ES", {
+                    ? currentValue.toLocaleString("es-ES", {
                         style: "currency",
                         currency: "EUR",
                       })
                     : "—"}
                 </td>
                 <td
-                  className={`px-4 py-3 text-right ${
-                    pnl >= 0 ? "text-green-600" : "text-red-600"
+                  className={`px-4 py-3 text-right tabular-nums ${
+                    isPositive
+                      ? "text-secondary"
+                      : isNegative
+                        ? "text-destructive"
+                        : "text-foreground"
                   }`}
                 >
                   {metalPrice ? (
                     <>
                       <div>
+                        {isPositive ? "+" : ""}
                         {pnl.toLocaleString("es-ES", {
                           style: "currency",
                           currency: "EUR",
                         })}
                       </div>
-                      <div className="text-xs">
-                        {pnlPercent >= 0 ? "+" : ""}
+                      <div className="text-xs opacity-80">
+                        {isPositive ? "+" : ""}
                         {pnlPercent.toFixed(2)}%
                       </div>
                     </>
@@ -105,23 +154,25 @@ export function AssetTable({
                   )}
                 </td>
                 <td className="px-4 py-3 text-right">
-                  {onEdit && (
+                  <div className="flex justify-end gap-1">
+                    {onEdit && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onEdit(asset)}
+                      >
+                        Editar
+                      </Button>
+                    )}
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => onEdit(asset)}
+                      className="text-destructive hover:text-destructive"
+                      onClick={() => onDelete(asset.id)}
                     >
-                      Editar
+                      Eliminar
                     </Button>
-                  )}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => onDelete(asset.id)}
-                    className="text-destructive hover:text-destructive"
-                  >
-                    Eliminar
-                  </Button>
+                  </div>
                 </td>
               </tr>
             )

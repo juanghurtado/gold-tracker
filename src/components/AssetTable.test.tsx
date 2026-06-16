@@ -21,14 +21,15 @@ const metalPrice: MetalPrice = { xauUsd: 2000, eurPerUsd: 0.92, timestamp: 1 }
 describe("AssetTable", () => {
   it("shows empty state when no assets", () => {
     render(<AssetTable assets={[]} metalPrice={null} onDelete={vi.fn()} />)
-    expect(screen.getByText("No hay activos en tu cartera. Añade tu primer activo.")).toBeInTheDocument()
+    expect(screen.getByText("No hay activos en tu cartera")).toBeInTheDocument()
   })
 
   it("displays asset details", () => {
     render(<AssetTable assets={[asset]} metalPrice={metalPrice} onDelete={vi.fn()} />)
     expect(screen.getByText("Krugerrand 1 oz")).toBeInTheDocument()
     expect(screen.getByText("Moneda")).toBeInTheDocument()
-    expect(screen.getByText("1 oz")).toBeInTheDocument()
+    expect(screen.getByText("1")).toBeInTheDocument()
+    expect(screen.getByText("oz t")).toBeInTheDocument()
     expect(screen.getByText("91.67%")).toBeInTheDocument()
     expect(screen.getByText(/2000,00/)).toBeInTheDocument()
   })

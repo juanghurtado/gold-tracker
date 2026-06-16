@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-16T10:29:43Z",
+  "title": "Design System: Gold Tracker",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Gold", "canonical": "oklch(70% 0.14 88)" },
+      "primary-deep": { "role": "primary-hover", "displayName": "Gold Deep", "canonical": "oklch(62% 0.13 88)" },
+      "secondary": { "role": "accent", "displayName": "Forest", "canonical": "oklch(55% 0.12 145)" },
+      "background": { "role": "neutral-bg", "displayName": "Warm White", "canonical": "oklch(98% 0.002 85)" },
+      "surface": { "role": "neutral", "displayName": "Pure White", "canonical": "oklch(100% 0 0)" },
+      "border": { "role": "neutral", "displayName": "Border Gray", "canonical": "oklch(90% 0.005 85)" },
+      "muted": { "role": "neutral", "displayName": "Muted Gray", "canonical": "oklch(48% 0.01 85)" },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "oklch(11% 0.005 85)" },
+      "ink-secondary": { "role": "neutral", "displayName": "Ink Secondary", "canonical": "oklch(27% 0.01 85)" },
+      "dark-primary": { "role": "primary-dark", "displayName": "Gold Bright", "canonical": "oklch(78% 0.15 88)" },
+      "dark-background": { "role": "neutral-bg-dark", "displayName": "Near Black", "canonical": "oklch(9% 0.003 85)" },
+      "dark-surface": { "role": "neutral-dark", "displayName": "Dark Surface", "canonical": "oklch(13% 0.004 85)" },
+      "dark-border": { "role": "neutral-dark", "displayName": "Dark Border", "canonical": "oklch(19% 0.005 85)" },
+      "dark-muted": { "role": "neutral-dark", "displayName": "Dark Muted", "canonical": "oklch(56% 0.01 85)" },
+      "dark-ink": { "role": "neutral-dark", "displayName": "Dark Ink", "canonical": "oklch(93% 0.003 85)" },
+      "dark-ink-secondary": { "role": "neutral-dark", "displayName": "Dark Ink Secondary", "canonical": "oklch(63% 0.01 85)" }
+    },
+    "typographyMeta": {
+      "body": { "displayName": "Body", "purpose": "Table cells, form text, dialog content." },
+      "heading": { "displayName": "Headline", "purpose": "Section titles, card titles." },
+      "display": { "displayName": "Display", "purpose": "App title, page headings." },
+      "label": { "displayName": "Label", "purpose": "Form labels, button text, chips." },
+      "mono": { "displayName": "Mono", "purpose": "Numeric data in tables." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Default transition easing for hover and focus states." },
+      { "name": "duration-fast", "value": "150ms", "purpose": "Quick state changes (hover, focus)." },
+      { "name": "duration-standard", "value": "200ms", "purpose": "Standard transitions (background color, border)." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Gold background, near-black text. Used for primary actions like adding assets.",
+      "html": "<button class=\"ds-btn-primary\">Añadir activo</button>",
+      "css": ".ds-btn-primary {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  height: 40px;\n  padding: 8px 20px;\n  background-color: #d4a843;\n  color: #1a1a18;\n  border: none;\n  border-radius: 4px;\n  font-size: 0.875rem;\n  font-weight: 500;\n  line-height: 1.4;\n  letter-spacing: 0.02em;\n  cursor: pointer;\n  transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);\n}\n.ds-btn-primary:hover {\n  background-color: #b8922e;\n}\n.ds-btn-primary:focus-visible {\n  outline: none;\n  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px #d4a843;\n}\n.ds-btn-primary:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n\n/* Dark mode */\n.dark .ds-btn-primary {\n  background-color: #e8c55a;\n  color: #141412;\n}\n.dark .ds-btn-primary:hover {\n  background-color: #d4b44a;\n}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Transparent background with border. Used for secondary actions.",
+      "html": "<button class=\"ds-btn-outline\">Configuración</button>",
+      "css": ".ds-btn-outline {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  height: 40px;\n  padding: 8px 20px;\n  background-color: transparent;\n  color: #1a1a18;\n  border: 1px solid #e5e5e0;\n  border-radius: 4px;\n  font-size: 0.875rem;\n  font-weight: 500;\n  line-height: 1.4;\n  letter-spacing: 0.02em;\n  cursor: pointer;\n  transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), color 200ms cubic-bezier(0.4, 0, 0.2, 1);\n}\n.ds-btn-outline:hover {\n  background-color: #fafaf8;\n}\n.ds-btn-outline:focus-visible {\n  outline: none;\n  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px #d4a843;\n}\n\n/* Dark mode */\n.dark .ds-btn-outline {\n  border-color: #2e2e2c;\n  color: #ecece8;\n}\n.dark .ds-btn-outline:hover {\n  background-color: #1e1e1c;\n}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "No border, no background until hover. Used for edit and cancel actions.",
+      "html": "<button class=\"ds-btn-ghost\">Editar</button>",
+      "css": ".ds-btn-ghost {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  height: 40px;\n  padding: 8px 12px;\n  background-color: transparent;\n  color: #1a1a18;\n  border: none;\n  border-radius: 4px;\n  font-size: 0.875rem;\n  font-weight: 500;\n  line-height: 1.4;\n  letter-spacing: 0.02em;\n  cursor: pointer;\n  transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), color 200ms cubic-bezier(0.4, 0, 0.2, 1);\n}\n.ds-btn-ghost:hover {\n  background-color: #fafaf8;\n}\n.ds-btn-ghost:focus-visible {\n  outline: none;\n  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px #d4a843;\n}\n\n/* Destructive variant */\n.ds-btn-ghost-destructive {\n  color: #c0392b;\n}\n.ds-btn-ghost-destructive:hover {\n  background-color: #fef2f2;\n}\n\n/* Dark mode */\n.dark .ds-btn-ghost:hover {\n  background-color: #1e1e1c;\n}\n.dark .ds-btn-ghost-destructive {\n  color: #ef4444;\n}\n.dark .ds-btn-ghost-destructive:hover {\n  background-color: rgba(239, 68, 68, 0.1);\n}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Dashboard metric card with title and value. 1px border, no shadow.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-header\"><h3 class=\"ds-card-title\">Activos</h3></div><div class=\"ds-card-content\"><span class=\"ds-card-value\">12</span></div></div>",
+      "css": ".ds-card {\n  background-color: #ffffff;\n  color: #1a1a18;\n  border: 1px solid #e5e5e0;\n  border-radius: 12px;\n  padding: 24px;\n  transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);\n}\n.ds-card:hover {\n  border-color: #d4a843;\n}\n.ds-card-header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: 8px;\n}\n.ds-card-title {\n  font-size: 0.875rem;\n  font-weight: 600;\n  line-height: 1.3;\n  color: #403f3a;\n}\n.ds-card-content {\n  padding-top: 0;\n}\n.ds-card-value {\n  font-size: 1.5rem;\n  font-weight: 700;\n  line-height: 1.2;\n  color: #1a1a18;\n}\n\n/* Dark mode */\n.dark .ds-card {\n  background-color: #1e1e1c;\n  border-color: #2e2e2c;\n  color: #ecece8;\n}\n.dark .ds-card:hover {\n  border-color: #e8c55a;\n}\n.dark .ds-card-title {\n  color: #a0a09a;\n}\n.dark .ds-card-value {\n  color: #ecece8;\n}"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Text input with 1px border, 40px height, focus ring in gold.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Krugerrand 1 oz\" />",
+      "css": ".ds-input {\n  display: flex;\n  height: 40px;\n  width: 100%;\n  padding: 8px 12px;\n  background-color: #fafaf8;\n  color: #1a1a18;\n  border: 1px solid #e5e5e0;\n  border-radius: 8px;\n  font-size: 0.875rem;\n  line-height: 1.6;\n  transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);\n}\n.ds-input::placeholder {\n  color: #403f3a;\n  opacity: 1;\n}\n.ds-input:focus {\n  outline: none;\n  border-color: #d4a843;\n  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px rgba(212, 168, 67, 0.3);\n}\n.ds-input:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n\n/* Dark mode */\n.dark .ds-input {\n  background-color: #141412;\n  color: #ecece8;\n  border-color: #2e2e2c;\n}\n.dark .ds-input::placeholder {\n  color: #8a8a85;\n}\n.dark .ds-input:focus {\n  border-color: #e8c55a;\n  box-shadow: 0 0 0 2px #141412, 0 0 0 4px rgba(232, 197, 90, 0.3);\n}"
+    },
+    {
+      "name": "Table",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Asset portfolio table with monospace numeric columns and P&L indicators.",
+      "html": "<div class=\"ds-table\"><table><thead><tr><th class=\"ds-table-th\">Nombre</th><th class=\"ds-table-th\">Peso</th><th class=\"ds-table-th\">Coste</th><th class=\"ds-table-th\">P&L</th></tr></thead><tbody><tr><td class=\"ds-table-td\">Krugerrand 1 oz</td><td class=\"ds-table-td ds-table-num\">1.00 oz</td><td class=\"ds-table-td ds-table-num\">2,100.00 €</td><td class=\"ds-table-td ds-table-num ds-table-positive\">+127.50 €</td></tr></tbody></table></div>",
+      "css": ".ds-table {\n  overflow-x: auto;\n  border: 1px solid #e5e5e0;\n  border-radius: 12px;\n}\n.ds-table table {\n  width: 100%;\n  border-collapse: collapse;\n}\n.ds-table-th {\n  padding: 12px 16px;\n  text-align: left;\n  font-size: 0.75rem;\n  font-weight: 500;\n  letter-spacing: 0.02em;\n  color: #403f3a;\n  background-color: rgba(0, 0, 0, 0.02);\n  border-bottom: 1px solid #e5e5e0;\n}\n.ds-table-td {\n  padding: 12px 16px;\n  font-size: 0.875rem;\n  line-height: 1.6;\n  color: #1a1a18;\n  border-bottom: 1px solid #e5e5e0;\n}\n.ds-table-td:last-child {\n  border-bottom: none;\n}\n.ds-table tr:last-child .ds-table-td {\n  border-bottom: none;\n}\n.ds-table tr:hover .ds-table-td {\n  background-color: rgba(0, 0, 0, 0.01);\n}\n.ds-table-num {\n  font-family: ui-monospace, SFMono-Regular, monospace;\n  text-align: right;\n}\n.ds-table-positive {\n  color: #2a6b4a;\n}\n.ds-table-negative {\n  color: #c0392b;\n}\n\n/* Dark mode */\n.dark .ds-table {\n  border-color: #2e2e2c;\n}\n.dark .ds-table-th {\n  color: #a0a09a;\n  background-color: rgba(255, 255, 255, 0.02);\n  border-bottom-color: #2e2e2c;\n}\n.dark .ds-table-td {\n  color: #ecece8;\n  border-bottom-color: #2e2e2c;\n}\n.dark .ds-table tr:hover .ds-table-td {\n  background-color: rgba(255, 255, 255, 0.02);\n}\n.dark .ds-table-positive {\n  color: #22c55e;\n}\n.dark .ds-table-negative {\n  color: #ef4444;\n}"
+    },
+    {
+      "name": "Dialog",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Centered modal dialog for adding/editing assets and settings.",
+      "html": "<div class=\"ds-dialog-overlay\"><div class=\"ds-dialog\"><div class=\"ds-dialog-header\"><h2 class=\"ds-dialog-title\">Nuevo activo</h2><p class=\"ds-dialog-description\">Añade una moneda o lingote a tu cartera.</p></div><div class=\"ds-dialog-footer\"><button class=\"ds-btn-outline\">Cancelar</button><button class=\"ds-btn-primary\">Guardar</button></div></div></div>",
+      "css": ".ds-dialog-overlay {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: fixed;\n  inset: 0;\n  background-color: rgba(0, 0, 0, 0.4);\n  z-index: 100;\n}\n.ds-dialog {\n  width: min(480px, calc(100vw - 32px));\n  background-color: #ffffff;\n  border: 1px solid #e5e5e0;\n  border-radius: 16px;\n  padding: 24px;\n  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);\n}\n.ds-dialog-header {\n  margin-bottom: 20px;\n}\n.ds-dialog-title {\n  font-size: 1.25rem;\n  font-weight: 600;\n  line-height: 1.3;\n  color: #1a1a18;\n  margin: 0 0 4px;\n}\n.ds-dialog-description {\n  font-size: 0.875rem;\n  color: #73726d;\n  margin: 0;\n}\n.ds-dialog-footer {\n  display: flex;\n  justify-content: flex-end;\n  gap: 8px;\n  margin-top: 16px;\n}\n\n/* Dark mode */\n.dark .ds-dialog {\n  background-color: #1e1e1c;\n  border-color: #2e2e2c;\n  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);\n}\n.dark .ds-dialog-title {\n  color: #ecece8;\n}\n.dark .ds-dialog-description {\n  color: #8a8a85;\n}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Precision Journal",
+    "overview": "Gold Tracker is a personal portfolio journal — not a trading terminal, not a SaaS dashboard. It presents hard financial data with the calm authority of a well-kept ledger. Every screen should feel like a page from a serious collector's notebook: sparse, legible, and purposeful.",
+    "keyCharacteristics": [
+      "Data-dense but visually sparse — more information through less decoration",
+      "Gold as a deliberate accent, not a theme",
+      "System fonts for speed and neutrality",
+      "Tonal layering over shadows for depth",
+      "Spanish-language typography throughout"
+    ],
+    "rules": [
+      { "name": "The Gold Rule", "body": "Gold is the accent — never the surface. It appears on ≤15% of any given screen. Its rarity is what makes it meaningful.", "section": "colors" },
+      { "name": "The No-Cream Rule", "body": "The page background is a true neutral (near-zero chroma), not cream, sand, or parchment. Warmth lives in the accent, not the canvas.", "section": "colors" },
+      { "name": "The Monospace-For-Numbers Rule", "body": "All numeric data in tables uses a monospace font. This ensures decimal alignment and makes scanning P&L values effortless.", "section": "typography" }
+    ],
+    "dos": [
+      "Do use gold sparingly — as an accent on buttons, active states, and the logo.",
+      "Do let monospace fonts handle numeric alignment in tables.",
+      "Do use tonal layering (background vs. surface) for depth, not shadows.",
+      "Do keep the page background a true neutral — no cream, no beige, no parchment.",
+      "Do use system fonts for instant rendering and zero font-loading jank.",
+      "Do pair P&L color indicators with +/− symbols for color-blind accessibility."
+    ],
+    "donts": [
+      "Don't use gradient backgrounds on cards, buttons, or text.",
+      "Don't use cream, sand, beige, parchment, or any warm near-white as a page background.",
+      "Don't use identical card grids — cards are for dashboard metrics only.",
+      "Don't use box-shadows on cards or containers (except focus rings).",
+      "Don't use color alone to convey P&L — always include a +/− symbol.",
+      "Don't use more than one accent color per screen (gold OR green, not both).",
+      "Don't use pill-shaped buttons (100% border-radius) except for tags and chips.",
+      "Don't use tracked uppercase eyebrow text above section headings."
+    ]
+  }
+}
