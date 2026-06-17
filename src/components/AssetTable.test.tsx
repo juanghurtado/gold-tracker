@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { render, screen, fireEvent } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { AssetTable } from "./AssetTable"
 import type { Asset, MetalPrice } from "../types"
@@ -21,7 +21,7 @@ const metalPrice: MetalPrice = { xauUsd: 2000, eurPerUsd: 0.92, timestamp: 1 }
 describe("AssetTable", () => {
   it("shows empty state when no assets", () => {
     render(<AssetTable assets={[]} metalPrice={null} onDelete={vi.fn()} />)
-    expect(screen.getByText("No hay activos en tu cartera")).toBeInTheDocument()
+    expect(screen.getByText("Tu colección está vacía")).toBeInTheDocument()
   })
 
   it("displays asset details", () => {
@@ -40,13 +40,15 @@ describe("AssetTable", () => {
     expect(dashes.length).toBe(2)
   })
 
-  it("calls onDelete with the correct id when clicking Eliminar", async () => {
+  it("calls onDelete with the correct id when clicking Eliminar", () => {
+    vi.useFakeTimers()
     const onDelete = vi.fn()
     render(<AssetTable assets={[asset]} metalPrice={metalPrice} onDelete={onDelete} />)
-    const user = userEvent.setup()
-    await user.click(screen.getByLabelText("Eliminar"))
+    fireEvent.click(screen.getByLabelText("Eliminar"))
+    vi.advanceTimersByTime(200)
     expect(onDelete).toHaveBeenCalledTimes(1)
     expect(onDelete).toHaveBeenCalledWith("1")
+    vi.useRealTimers()
   })
 
   it("shows edit button and calls onEdit when clicked", async () => {

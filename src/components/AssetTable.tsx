@@ -1,6 +1,7 @@
 import type { Asset, MetalPrice } from "../types"
 import { calculateSpotEurPerOz, assetPnL } from "../lib/calculations"
 import { Button } from "./ui/Button"
+import { useState } from "react"
 
 const assetTypeLabel: Record<string, string> = {
   coin: "Moneda",
@@ -14,6 +15,7 @@ interface AssetTableProps {
   metalPrice: MetalPrice | null
   onDelete: (id: string) => void
   onEdit?: (asset: Asset) => void
+  newAssetId?: string | null
 }
 
 export function AssetTable({
@@ -21,18 +23,58 @@ export function AssetTable({
   metalPrice,
   onDelete,
   onEdit,
+  newAssetId,
 }: AssetTableProps) {
   const spotEurPerOz = metalPrice ? calculateSpotEurPerOz(metalPrice) : 0
+  const [animatingOutIds, setAnimatingOutIds] = useState<Set<string>>(new Set())
+
+  function handleDelete(id: string) {
+    setAnimatingOutIds((prev) => new Set(prev).add(id))
+    setTimeout(() => {
+      onDelete(id)
+      setAnimatingOutIds((prev) => {
+        const next = new Set(prev)
+        next.delete(id)
+        return next
+      })
+    }, 200)
+  }
 
   if (assets.length === 0) {
     return (
       <div className="rounded-[var(--radius-lg)] border border-border bg-card">
-        <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
-          <div className="text-sm font-semibold text-muted-foreground">
-            No hay activos en tu cartera
-          </div>
-          <div className="text-xs text-muted-foreground">
-            Añade tu primera moneda o lingote para empezar a seguir tu inversión.
+        <div className="flex flex-col items-center justify-center gap-5 py-16 text-center">
+          <svg
+            width="56"
+            height="56"
+            viewBox="0 0 56 56"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            className="opacity-60"
+          >
+            <circle cx="28" cy="28" r="26" stroke="currentColor" strokeWidth="2" className="text-gold-border" />
+            <circle cx="28" cy="28" r="20" stroke="currentColor" strokeWidth="1.5" className="text-gold-border" />
+            <text
+              x="28"
+              y="32"
+              textAnchor="middle"
+              className="fill-gold-spotlight dark:fill-primary"
+              fontSize="18"
+              fontWeight="700"
+              fontFamily="system-ui, sans-serif"
+            >
+              Au
+            </text>
+          </svg>
+          <div className="space-y-1">
+            <p className="text-sm font-semibold text-foreground">
+              Tu colección está vacía
+            </p>
+            <p className="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
+              Añade tu primera moneda o lingote para empezar a seguir tu inversión en oro.
+              Tus datos se guardan localmente.
+            </p>
           </div>
         </div>
       </div>
@@ -80,7 +122,9 @@ export function AssetTable({
             return (
               <tr
                 key={asset.id}
-                className="transition-colors hover:bg-gold-surface"
+                className={`transition-colors hover:bg-gold-surface ${
+                  animatingOutIds.has(asset.id) ? "animate-fade-out" : ""
+                } ${newAssetId === asset.id ? "animate-scale-in" : ""}`}
               >
                 <td className="px-4 py-3">
                   <div className="font-semibold text-foreground">
@@ -176,7 +220,7 @@ export function AssetTable({
                       variant="ghost"
                       size="sm"
                       className="text-destructive/70 hover:text-destructive"
-                      onClick={() => onDelete(asset.id)}
+                      onClick={() => handleDelete(asset.id)}
                       aria-label="Eliminar"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>

@@ -29,14 +29,30 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     if (this.state.hasError) {
       return (
         <div className="flex min-h-screen items-center justify-center bg-background p-8">
-          <div className="max-w-md space-y-4 text-center">
-            <h1 className="text-2xl font-bold text-foreground">
-              Algo salió mal
-            </h1>
-            <p className="text-muted-foreground">
-              Ha ocurrido un error inesperado. Recarga la página o vacía los
-              datos de la aplicación si el problema persiste.
-            </p>
+          <div className="max-w-md space-y-6 text-center">
+            <svg
+              width="48"
+              height="48"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              className="mx-auto opacity-40"
+            >
+              <circle cx="24" cy="24" r="22" stroke="currentColor" strokeWidth="2" className="text-gold-border"/>
+              <circle cx="16" cy="18" r="1.5" fill="currentColor" className="text-muted-foreground"/>
+              <circle cx="32" cy="18" r="1.5" fill="currentColor" className="text-muted-foreground"/>
+              <path d="M16 30 Q24 36 32 30" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" className="text-muted-foreground"/>
+            </svg>
+            <div className="space-y-2">
+              <h1 className="text-xl font-bold text-foreground">
+                Algo salió mal
+              </h1>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Ha ocurrido un error inesperado. No te preocupes — tus activos
+                están a salvo en tu navegador. Prueba a recargar la página.
+              </p>
+            </div>
             <div className="flex justify-center gap-2">
               <Button
                 onClick={() => window.location.reload()}

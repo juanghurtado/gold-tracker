@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import type { Asset, MetalPrice } from "./types"
 import { getAssets, saveAsset, deleteAsset, updateAsset, getApiKey, saveApiKey, getMetalPrice, exportAllData, importAllData, getAutoRefreshInterval, saveAutoRefreshInterval } from "./lib/storage"
 import { fetchMetalPrice } from "./lib/api"
+import { calculateSpotEurPerOz, portfolioPnL } from "./lib/calculations"
 import { Dashboard } from "./components/Dashboard"
 import { AssetTable } from "./components/AssetTable"
 import { AddAssetDialog } from "./components/AddAssetDialog"
@@ -30,6 +31,29 @@ export default function App() {
   })
 
   const abortControllerRef = useRef<AbortController | null>(null)
+  const [newAssetId, setNewAssetId] = useState<string | null>(null)
+
+  const spotEurPerOz = metalPrice ? calculateSpotEurPerOz(metalPrice) : 0
+  const { totalValue } = portfolioPnL(assets, spotEurPerOz)
+  const prevPortfolioRef = useRef(0)
+  const [milestone, setMilestone] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (prevPortfolioRef.current === 0 && totalValue > 0) {
+      prevPortfolioRef.current = totalValue
+      return
+    }
+    const thresholds = [10000, 25000, 50000, 100000, 250000, 500000, 1000000]
+    for (const t of thresholds) {
+      if (prevPortfolioRef.current < t && totalValue >= t) {
+        setMilestone(`¡Cartera supera los ${t.toLocaleString("es-ES")} €!`)
+        setTimeout(() => setMilestone(null), 4000)
+        break
+      }
+    }
+    prevPortfolioRef.current = totalValue
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalValue])
 
   useEffect(() => {
     if (dark) {
@@ -89,6 +113,8 @@ export default function App() {
     } else {
       saveAsset(asset)
       setAssets((prev) => [...prev, asset])
+      setNewAssetId(asset.id)
+      setTimeout(() => setNewAssetId(null), 300)
     }
   }
 
@@ -148,7 +174,7 @@ export default function App() {
       <ErrorBoundary>
         <header className="border-b border-border">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-            <h1 className="text-2xl font-extrabold tracking-tighter text-primary">
+            <h1 className="shimmer-text text-2xl font-extrabold tracking-tighter text-primary">
               Gold Tracker
             </h1>
             <div className="flex items-center gap-2">
@@ -195,14 +221,20 @@ export default function App() {
         </header>
 
         <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
+          {milestone && (
+            <div className="animate-slide-in rounded-[var(--radius-lg)] border border-primary/60 bg-primary/10 p-4 text-sm font-medium text-primary text-center">
+              {milestone}
+            </div>
+          )}
+
           {error && (
-            <div className="rounded-[var(--radius-lg)] border border-destructive bg-destructive/10 p-4 text-sm text-destructive">
+            <div className="animate-slide-in rounded-[var(--radius-lg)] border border-destructive bg-destructive/10 p-4 text-sm text-destructive">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="rounded-[var(--radius-lg)] border border-secondary bg-secondary/10 p-4 text-sm text-secondary">
+            <div className="animate-slide-in rounded-[var(--radius-lg)] border border-secondary bg-secondary/10 p-4 text-sm text-secondary">
               {success}
             </div>
           )}
@@ -214,13 +246,14 @@ export default function App() {
             </div>
           )}
 
-          <Dashboard assets={assets} metalPrice={metalPrice} />
+          <Dashboard assets={assets} metalPrice={metalPrice} refreshing={loading} />
 
           <AssetTable
             assets={assets}
             metalPrice={metalPrice}
             onDelete={handleDeleteAsset}
             onEdit={handleEditAsset}
+            newAssetId={newAssetId}
           />
         </main>
 

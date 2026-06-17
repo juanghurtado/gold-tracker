@@ -14,9 +14,10 @@ function timeAgo(timestamp: number): string {
 interface DashboardProps {
   assets: Asset[]
   metalPrice: MetalPrice | null
+  refreshing?: boolean
 }
 
-export function Dashboard({ assets, metalPrice }: DashboardProps) {
+export function Dashboard({ assets, metalPrice, refreshing }: DashboardProps) {
   const spotEurPerOz = metalPrice ? calculateSpotEurPerOz(metalPrice) : 0
   const { totalCost, totalValue, pnl, pnlPercent } = portfolioPnL(assets, spotEurPerOz)
 
@@ -44,7 +45,7 @@ export function Dashboard({ assets, metalPrice }: DashboardProps) {
             Coste total
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className={refreshing ? "animate-pulse-glow rounded-[var(--radius-lg)]" : ""}>
           <div className="text-2xl font-extrabold tabular-nums tracking-tight">
             {totalCost.toLocaleString("es-ES", {
               style: "currency",
@@ -62,7 +63,7 @@ export function Dashboard({ assets, metalPrice }: DashboardProps) {
             Valor actual
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className={refreshing ? "animate-pulse-glow rounded-[var(--radius-lg)]" : ""}>
           <div className="text-2xl font-extrabold tabular-nums tracking-tight">
             {totalValue.toLocaleString("es-ES", {
               style: "currency",
@@ -90,7 +91,7 @@ export function Dashboard({ assets, metalPrice }: DashboardProps) {
             Beneficio / Pérdida
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className={refreshing ? "animate-pulse-glow rounded-[var(--radius-lg)]" : ""}>
           <div className={`text-3xl font-extrabold tabular-nums tracking-tight ${
             isPositive
               ? "text-secondary dark:text-secondary"
